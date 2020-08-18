@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.erst.mobilelink_back.mapper.BoardMapper">
+
+    <select id="searchBoard" parameterType="map" resultType="boardVo">
+        SELECT * FROM mobilelink.board WHERE status = 1
+        <if test="telecom != '' and telecom != null">
+            AND telecom = ${telecom}
+            <if test="search != '' and keyword != null">
+                <choose>
+                    <when test="search.equals('title')">
+                        AND title LIKE CONCAT('%',#{keyword},'%')
+                    </when>
+                    <when test="search.equals('content')">
+                        AND content LIKE CONCAT('%',#{keyword},'%')
+                    </when>
+                </choose>
+            </if>
+        </if>
+        <if test="search != '' and keyword != null">
+            <choose>
+                <when test="search.equals('title')">
+                    AND title LIKE CONCAT('%',#{keyword},'%')
+                </when>
+                <when test="search.equals('content')">
+                    AND content LIKE CONCAT('%',#{keyword},'%')
+                </when>
+            </choose>
+        </if>
+        ORDER BY reg_date DESC LIMIT ${offset}, ${limit}
+    </select>
+
+    <select id="countSearchBoard" parameterType="map" resultType="int">
+        SELECT count(*) FROM mobilelink.board WHERE status = 1
+        <if test="telecom != '' and telecom != null">
+            AND telecom = ${telecom}
+            <if test="search != '' and keyword != null">
+                <choose>
+                    <when test="search.equals('title')">
+                        AND title LIKE CONCAT('%',#{keyword},'%')
+                    </when>
+                    <when test="search.equals('content')">
+                        AND content LIKE CONCAT('%',#{keyword},'%')
+                    </when>
+                </choose>
+            </if>
+        </if>
+        <if test="search != '' and keyword != null">
+            <choose>
+                <when test="search.equals('title')">
+                    AND title LIKE CONCAT('%',#{keyword},'%')
+                </when>
+                <when test="search.equals('content')">
+                    AND content LIKE CONCAT('%',#{keyword},'%')
+                </when>
+            </choose>
+        </if>
+    </select>
+
+    <select id="selectOneBoard" resultType="boardVo">
+        SELECT * FROM mobilelink.board WHERE id = #{id}
+    </select>
+
+    <insert id="insertNewBoard" parameterType="boardVo">
+        INSERT INTO mobilelink.board() VALUES(0, #{title}, #{content}, now(), null, 0, #{telecom}, #{adminId}, 1)
+    </insert>
+
+    <update id="readCountClickToBoard" parameterType="int">
+        UPDATE mobilelink.board SET read_count = read_count + 1 WHERE id = #{id}
+    </update>
+
+    <update id="updateOneBoard" parameterType="map">
+        UPDATE mobilelink.board SET title = #{title}, content = #{content}, telecom = #{telecom},
+        up_date = now() WHERE id = #{id} AND admin_id = #{adminId}
+    </update>
+
+    <!-- 가짜로 지워지는 쿼리 -->
+    <update id="deleteOneBoard" parameterType="int">
+        UPDATE mobilelink.board SET status = 0, up_date = now() WHERE id = #{id}
+    </update>
+
+    <!-- 실제로 지워지는 쿼리 -->
+    <delete id="realDeleteOneBoard" parameterType="int">
+        DELETE FROM mobilelink.board WHERE id = #{id}
+    </delete>
+
+</mapper>
