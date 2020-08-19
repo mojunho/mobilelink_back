@@ -52,8 +52,8 @@ public class BoardController {
         }
         if (viewCookie == null) {
             Cookie newCookie = new Cookie("cookie" + id, "|" + id + "|");
+            newCookie.setMaxAge(24 * 60 * 60);
             response.addCookie(newCookie);
-            newCookie.setMaxAge(30 * 60);
             if (boardService.readCountClickToBoard(id)) {
                 System.out.println("조회수 증가");
             } else {
