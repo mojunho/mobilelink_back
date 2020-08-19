@@ -7,7 +7,7 @@ import kr.co.erst.mobilelink_back.vo.BoardVo;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.security.Principal;
@@ -17,9 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@org.springframework.web.bind.annotation.RestController
+@RestController
 @RequestMapping(value = "/rest")
-public class RestController {
+public class BoardRestController {
 
     @Resource
     BoardService boardService;
@@ -30,7 +30,6 @@ public class RestController {
     public static final int LIMIT = 10;
 
     // 게시글 목록
-    @ResponseBody
     @RequestMapping(value = "/boardlistrest", method = RequestMethod.POST)
     public Map boardListRest(@RequestBody Map<String, Object> searchInfo) throws Exception {
         int telecomNum;
@@ -102,7 +101,6 @@ public class RestController {
     }
 
     // 게시글 등록
-    @ResponseBody
     @RequestMapping(value = "/boardregrest", method = RequestMethod.POST)
     public Map boardRegRest(@RequestBody Map<String, Object> regInfo, Principal principal) throws Exception {
         int telecomNum;
@@ -138,7 +136,6 @@ public class RestController {
     }
 
     // 게시글 수정
-    @ResponseBody
     @RequestMapping(value = "/boardeditrest", method = RequestMethod.POST)
     public Map boardEditRest(@RequestBody Map<String, Object> editInfo, Principal principal) throws Exception {
         int telecomNum;
